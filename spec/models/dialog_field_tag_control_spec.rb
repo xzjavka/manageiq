@@ -8,55 +8,54 @@ describe DialogFieldTagControl do
   end
 
   context "dialog field tag control without options hash" do
-    before(:each) do
-      @df = FactoryGirl.create(:dialog_field_tag_control, :label => 'test tag category', :name => 'test tag category')
-    end
+   let(:df){FactoryGirl.create(:dialog_field_tag_control, :label => 'test tag category', :name => 'test tag category'}
+  
 
     it "#category=" do
-      @df.category = 1
-      expect(@df.options[:category_id]).to eq(1)
+      df.category = 1
+      expect(df.options[:category_id]).to eq(1)
     end
 
     it "#category" do
-      expect(@df.category).to be_nil
+      expect(df.category).to be_nil
     end
 
     it "#category_name" do
-      expect(@df.category_name).to be_nil
+      expect(df.category_name).to be_nil
     end
 
     it "#category_description" do
-      expect(@df.category_description).to be_nil
+      expect(df.category_description).to be_nil
     end
 
     it "#single_value?" do
-      expect(@df.single_value?).to be_falsey
+      expect(df.single_value?).to be_falsey
 
-      @df.force_single_value = true
-      expect(@df.single_value?).to be_truthy
+      df.force_single_value = true
+      expect(df.single_value?).to be_truthy
     end
 
     it "#force_multi_value" do
-      expect(@df.force_multi_value).to be_truthy
+      expect(df.force_multi_value).to be_truthy
 
-      @df.force_single_value = true
-      expect(@df.force_multi_value).to be_falsey
+      df.force_single_value = true
+      expect(df.force_multi_value).to be_falsey
     end
 
     it "#automate_key_name" do
-      expect(@df.automate_key_name).to eq("Array::dialog_#{@df.name}")
+      expect(df.automate_key_name).to eq("Array::dialog_#{df.name}")
     end
 
     describe "#initialize_with_values" do
       it "uses #automate_key_name for extracting initial dialog values" do
         dialog_value = "dummy dialog value"
-        @df.initialize_with_values(@df.automate_key_name => dialog_value)
-        expect(@df.value).to eq(dialog_value)
+        df.initialize_with_values(df.automate_key_name => dialog_value)
+        expect(df.value).to eq(dialog_value)
       end
 
       it "converts automate dialog value to Classification ids" do
-        @df.initialize_with_values(@df.automate_key_name => "Classification::123,Classification::234")
-        expect(@df.value).to eq("123,234")
+        df.initialize_with_values(df.automate_key_name => "Classification::123,Classification::234")
+        expect(df.value).to eq("123,234")
       end
     end
   end
